@@ -1,0 +1,68 @@
+import math
+import numpy as np
+from tkinter import *
+
+window = Tk()
+window.title('Маятник')
+q = 0
+canvas = Canvas(window, width=1920, height=1080, bg="black")
+canvas.pack()
+
+canvas.create_line(149,665,149, 675, fill=("white"), width=2)
+canvas.create_line(249,665,249, 675, fill=("white"), width=2)
+canvas.create_line(349,665,349, 675, fill=("white"), width=2)
+canvas.create_line(449,665,449, 675, fill=("white"), width=2)
+canvas.create_line(549,665,549, 675, fill=("white"), width=2)
+canvas.create_line(649,665,649, 675, fill=("white"), width=2)
+canvas.create_line(749,665,749, 675, fill=("white"), width=2)
+canvas.create_line(849,665,849, 675, fill=("white"), width=2)
+canvas.create_line(949,665,949, 675, fill=("white"), width=2)
+canvas.create_line(1049,665,1049, 675, fill=("white"), width=2)
+canvas.create_line(1149,665,1149, 675, fill=("white"), width=2)
+canvas.create_line(1249,665,1249, 675, fill=("white"), width=2)
+canvas.create_line(1349,665,1349, 675, fill=("white"), width=2)
+
+canvas.create_text(149,685,text="1 с",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(549,685,text="5 с",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(1049,685,text="10 с",
+          font="Verdana 15",justify=CENTER,fill="white")
+
+canvas.create_line(50, 240,50, 700, fill=("white"), width=2)
+canvas.create_line(18,670,1400, 670, fill=("white"), width=2)
+
+canvas.create_text(1300,100,text="Масса тела m -  2 кг.",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(1300,150,text="G - 9,8 м/с²",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(1300,200,text="Упругость k - 10 Н/М ",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(1300,250,text="Циклическая частота ω - 2 р/с",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(1200,50,text="Математическая модель - x(t) =  mg / k (1  -  cos(ω0t))",
+          font="Verdana 15",justify=CENTER,fill="white")
+
+canvas.create_text(1400,710,text="Время, t",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(30,250,text="x",
+          font="Verdana 15",justify=CENTER,fill="white")
+
+canvas.create_text(50,240,text="↑",
+          font="Verdana 30",justify=CENTER,fill="white")
+canvas.create_text(1400,664,text="→",
+          font="Verdana 30",justify=CENTER,fill="white")
+### МАССА 2 КГ, G 9,8 , УПРУГОСТЬ 10 Н/М, цикл частота 2
+for t in np.arange(0, 13.6, 0.01):
+    x = 2 * (9.8 / 10) * (1 - math.cos(2 * t))
+    print(x)
+    x = x * 100 - 125
+    t1 = t * 100 + 50
+    x += 400
+    if t > 0.01:
+        canvas.create_line(t1, x, tt, xx, fill=("red"), width=1)
+    xx = x
+    tt = t1
+
+
+window.mainloop()

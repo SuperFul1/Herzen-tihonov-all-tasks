@@ -1,0 +1,58 @@
+import math
+import numpy as np
+from tkinter import *
+
+window = Tk()
+window.title('I')
+q = 0
+canvas = Canvas(window, width=1920, height=1080, bg="black")
+canvas.pack()
+
+
+canvas.create_line(347,665,347, 675, fill=("white"), width=2)
+canvas.create_line(647,665,647, 675, fill=("white"), width=2)
+canvas.create_line(947,665,947, 675, fill=("white"), width=2)
+canvas.create_line(1247,665,1247, 675, fill=("white"), width=2)
+
+canvas.create_text(347,685,text="1 с",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(647,685,text="2 с",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(947,685,text="3 с",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(1247,685,text="4 с",
+          font="Verdana 15",justify=CENTER,fill="white")
+
+canvas.create_line(50, 240,50, 700, fill=("white"), width=2)
+canvas.create_line(18,670,1400, 670, fill=("white"), width=2)
+
+canvas.create_text(1300,100,text="Сила тока I0 - 0.5 м.",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(1300,150,text="Циклическая частота ω - 25 р/c",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(1200,50,text="Математичская модель q(t) = q0 * (cos(ω * t + pi / 2))",
+          font="Verdana 15",justify=CENTER,fill="white")
+
+canvas.create_text(1400,710,text="Время, t",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(30,250,text="i",
+          font="Verdana 15",justify=CENTER,fill="white")
+
+canvas.create_text(50,240,text="↑",
+          font="Verdana 30",justify=CENTER,fill="white")
+canvas.create_text(1400,664,text="→",
+          font="Verdana 30",justify=CENTER,fill="white")
+### СИЛА ТОКА I0 1,  ЦИКЛ ЧАСТОТА 25
+for t in np.arange(0, 4.55, 0.01):
+    q = 0.5 * (math.cos(25 * t + 3.1415 / 2))
+    print(q)
+    q = q * 300 + 116
+    t1 = t * 300 + 48
+    q += 400
+    if t > 0.01:
+        canvas.create_line(t1, q, tt, xx, fill=("red"), width=1)
+    xx = q
+    tt = t1
+
+
+window.mainloop()
