@@ -1,0 +1,108 @@
+import tabulate
+
+
+def triangular_factorization_method(input_matrix, result_vector):
+    number_of_rows = 4
+    number_of_columns = 4
+    lower_triangular_matrix = [[0 for column_index in range(number_of_columns)] for row_index in range(number_of_rows)]
+    upper_triangular_matrix = [[0 for column_index in range(number_of_columns)] for row_index in range(number_of_rows)]
+    intermediate_solution_vector = [[0] for row_index in range(number_of_rows)]
+    final_solution_vector = [[0] for row_index in range(number_of_rows)]
+
+    for row_index in range(number_of_rows):
+        upper_triangular_matrix[row_index][row_index] = 1
+        lower_triangular_matrix[row_index][0] = input_matrix[row_index][0]
+        for column_index in range(row_index, number_of_columns):
+            sum_for_lower = sum([lower_triangular_matrix[column_index][intermediate_index] *
+                                 upper_triangular_matrix[intermediate_index][row_index] for intermediate_index in
+                                 range(0, column_index)])
+            lower_triangular_matrix[column_index][row_index] = round(
+                input_matrix[column_index][row_index] - sum_for_lower, 2)
+        for column_index in range(row_index + 1, number_of_columns):
+            sum_for_upper = sum([lower_triangular_matrix[row_index][intermediate_index] *
+                                 upper_triangular_matrix[intermediate_index][column_index] for intermediate_index in
+                                 range(row_index)])
+            upper_triangular_matrix[row_index][column_index] = round(
+                (input_matrix[row_index][column_index] - sum_for_upper) / lower_triangular_matrix[row_index][row_index],
+                2)
+
+    intermediate_solution_vector[0][0] = result_vector[0][0] / lower_triangular_matrix[0][0]
+    for row_index in range(1, number_of_rows):
+        sum_for_intermediate = sum([lower_triangular_matrix[row_index][intermediate_index] *
+                                    intermediate_solution_vector[intermediate_index][0] for intermediate_index in
+                                    range(row_index)])
+        intermediate_solution_vector[row_index][0] = round(
+            (result_vector[row_index][0] - sum_for_intermediate) / lower_triangular_matrix[row_index][row_index], 2)
+
+    final_solution_vector[number_of_rows - 1][0] = intermediate_solution_vector[number_of_rows - 1][0]
+    for row_index in range(number_of_rows - 2, -1, -1):
+        sum_for_final = sum(
+            [upper_triangular_matrix[row_index][column_index] * final_solution_vector[column_index][0] for column_index
+             in range(row_index + 1, number_of_rows)])
+        final_solution_vector[row_index][0] = intermediate_solution_vector[row_index][0] - sum_for_final
+
+    print('Нижняя треугольная матрица:\n', tabulate.tabulate(lower_triangular_matrix))
+    print('Верхняя треугольная матрица:\n', tabulate.tabulate(upper_triangular_matrix))
+    print('Промежуточный вектор решений Z:\n', tabulate.tabulate(intermediate_solution_vector))
+    print('Конечный вектор решений X:\n', tabulate.tabulate(final_solution_vector))
+    return final_solution_vector
+
+
+def cholesky_square_method(input_matrix, result_vector):
+    number_of_columns = number_of_rows = 4
+    cholesky_matrix = [[0 for column_index in range(number_of_columns)] for row_index in range(number_of_rows)]
+    intermediate_solution_vector = [[0] for row_index in range(number_of_rows)]
+    final_solution_vector = [[0] for row_index in range(number_of_rows)]
+
+    cholesky_matrix[0][0] = input_matrix[0][0] ** 0.5
+    for row_index in range(number_of_rows):
+        cholesky_matrix[0][row_index] = input_matrix[0][row_index] / cholesky_matrix[0][0]
+    for row_index in range(1, number_of_rows):
+        for column_index in range(row_index, number_of_rows):
+            if row_index == column_index:
+                sum_for_diagonal = sum(
+                    [cholesky_matrix[intermediate_index][row_index] * cholesky_matrix[intermediate_index][row_index] for
+                     intermediate_index in range(number_of_rows)])
+                cholesky_matrix[row_index][row_index] = (input_matrix[row_index][row_index] - sum_for_diagonal) ** 0.5
+            else:
+                sum_for_upper = sum(
+                    cholesky_matrix[intermediate_index][row_index] * cholesky_matrix[intermediate_index][column_index]
+                    for intermediate_index in range(number_of_rows))
+                cholesky_matrix[row_index][column_index] = (input_matrix[row_index][column_index] - sum_for_upper) / \
+                                                           cholesky_matrix[row_index][row_index]
+
+    print('Матрица Холецкого R:\n', tabulate.tabulate(cholesky_matrix))
+    for row_index in range(number_of_rows):
+        sum_for_intermediate = sum(
+            cholesky_matrix[intermediate_index][row_index] * intermediate_solution_vector[intermediate_index][0] for
+            intermediate_index in range(row_index))
+        intermediate_solution_vector[row_index][0] = (result_vector[row_index][0] - sum_for_intermediate) / \
+                                                     cholesky_matrix[row_index][row_index]
+
+    print('Промежуточный вектор решений Z:\n', tabulate.tabulate(intermediate_solution_vector))
+
+    final_solution_vector[number_of_rows - 1][0] = intermediate_solution_vector[number_of_rows - 1][0] / \
+                                                   cholesky_matrix[number_of_rows - 1][number_of_rows - 1]
+    for row_index in range(number_of_rows - 2, -1, -1):
+        sum_for_final = sum(
+            [cholesky_matrix[row_index][column_index] * final_solution_vector[column_index][0] for column_index in
+             range(row_index + 1, number_of_rows)])
+        final_solution_vector[row_index][0] = (intermediate_solution_vector[row_index][0] - sum_for_final) / \
+                                              cholesky_matrix[row_index][row_index]
+
+    print('Конечный вектор решений X:\n', tabulate.tabulate(final_solution_vector))
+
+
+if __name__ == '__main__':
+    input_matrix = [[5, 7, 6, 5], [7, 10, 8, 7], [6, 8, 10, 9], [5, 7, 9, 10]]
+    print('Исходная матрица A:\n', tabulate.tabulate(input_matrix))
+    result_vector = [[23], [32], [33], [31]]
+    print('Исходный вектор B:\n', tabulate.tabulate(result_vector))
+
+    print('Метод треугольной факторизации')
+    final_solution_vector_1 = triangular_factorization_method(input_matrix, result_vector)
+
+    print('\n')
+
+    print('Метод Холецкого в квадрате')
+    cholesky_square_method(input_matrix, result_vector)
