@@ -1,0 +1,64 @@
+import math
+import numpy as np
+from tkinter import *
+
+window = Tk()
+window.title('Маятник')
+q = 0
+canvas = Canvas(window, width=1920, height=1080, bg="black")
+canvas.pack()
+
+
+canvas.create_line(280,665,280, 675, fill=("white"), width=2)
+
+
+canvas.create_text(280,685,text="0.5",
+          font="Verdana 15",justify=CENTER,fill="white")
+
+canvas.create_line(50, 240,50, 700, fill=("white"), width=2)
+canvas.create_line(18,670,480, 670, fill=("white"), width=2)
+
+canvas.create_text(1300,100,text="Амплитуда A - 0.5 м.",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(1300,150,text="Циклическая частота ω - 3 р/c",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(1250,50,text="Математичская модель x(t) = A * (cos(ω * t))",
+          font="Verdana 15",justify=CENTER,fill="white")
+
+canvas.create_text(500,710,text="Коэфицент трения k",
+          font="Verdana 15",justify=CENTER,fill="white")
+canvas.create_text(30,250,text="F",
+          font="Verdana 15",justify=CENTER,fill="white")
+
+canvas.create_text(50,240,text="↑",
+          font="Verdana 30",justify=CENTER,fill="white")
+canvas.create_text(480,664,text="→",
+          font="Verdana 30",justify=CENTER,fill="white")
+### СИЛА ТРЕНИЯ 10 МАССА 20 Г 9.8 ВЫСОТА 2
+for t in np.arange(0, 1, 0.05):
+    c = 0.523599 # 30 gradusov
+    #c = 0.785398163 # 45 gradusov
+    #c = 1.5708 # 90 gradusov
+    #f = 20 * 9.8 * (t * math.cos(c) - math.sin(c))  #РАВНОДЕЙСТВУЮЩАЯ ВСЕХ СИЛ
+    #f = f * 10
+    #print(f)
+    #A = 9.8 * 20 * 2
+    #2f = f / 4 - 200
+    #2print(f, t)
+    #3A = t  * 20 * 9.8 * math.cos(c) * (2 / math.sin(c)) * math.cos(3.14159) #СИЛА ТРЕНИЯ
+    #3print(f, t)
+    #3f = abs(f - 1500) * 2 - 1050
+    #3t = t * 2
+    ##print(f, t)
+    #4A = 20 * 9.8 * (t * math.cos(c) - math.sin(c)) * (2 / math.sin(c)) * math.cos(0)
+    #4print(f, math.tan(c), t)
+    #4f = abs(f - 1410) / 3 - 310
+    #4f = f * 9.24
+    #4t = t * 3
+    if t > 0.04:
+        canvas.create_line((t * 500 ) + 50, int(f / 6) + 342, (tt * 500) + 50, int(ff / 6) + 342, fill=("red"), width=2)
+    ff = f
+    tt = t
+
+
+window.mainloop()
